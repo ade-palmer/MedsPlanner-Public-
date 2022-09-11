@@ -1,2 +1,3 @@
 # MedsPlanner-Public-
-Solution for managing and monitoring some ones medications
+
+Blazor PWA App for managing and monitoring medications
