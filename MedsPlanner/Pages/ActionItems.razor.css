@@ -1,0 +1,74 @@
+﻿.timeline-content dd {
+    font-size: smaller;
+    margin: 0 0 0 15px;
+    /*line-height: 14px;*/
+    /*margin-left: 10px;*/
+}
+
+.timeline-content {
+    color: #555;
+    padding: 10px 10px 1px 80px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.timeline-content:before {
+    content: '';
+    background-color: #00A7FB;
+    height: 100%;
+    width: 4px;
+    position: absolute;
+    left: 65px;
+    top: 0;
+}
+
+.timeline-time {
+    color: #00A7FB;
+    font-size: 1.2rem;
+    font-weight: 700;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.timeline-content:nth-child(even) {
+    padding: 15px 80px 15px 20px;
+}
+
+    .timeline-content:nth-child(even):before {
+        left: auto;
+        right: 65px;
+    }
+
+    .timeline-content:nth-child(even) .timeline-time {
+        left: auto;
+        right: 10px;
+    }
+
+.timeline-content:nth-child(4n+2):before {
+    background-color: #FF3E7D;
+}
+
+.timeline-content:nth-child(4n+2) .timeline-time {
+    color: #FF3E7D;
+}
+
+.timeline-content:nth-child(4n+3):before {
+    background-color: #7338BA;
+}
+
+.timeline-content:nth-child(4n+3) .timeline-time {
+    color: #7338BA;
+}
+
+.timeline-content:nth-child(4n+4):before {
+    background-color: #FF9800;
+}
+
+.timeline-content:nth-child(4n+4) .timeline-time {
+    color: #FF9800;
+}
+
+

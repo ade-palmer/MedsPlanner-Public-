@@ -1,0 +1,56 @@
+﻿@page "/fetchactionitems"
+@inject HttpClient Http
+
+<PageTitle>Action Items</PageTitle>
+
+<h1>Action Items</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (actionItems == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var group in groupedActionItems)
+    {
+        <div class="alert alert-secondary mt-2">
+            <div>@($"{group.Key}")</div>
+            @foreach (var actionItem in group)
+            {
+                <div>@actionItem.Name <small>@($"({FormatDetails(actionItem)})")</small></div>
+                <small>@actionItem.Strength (@actionItem.Type)</small>
+            }
+        </div>
+    }
+}
+
+@code {
+    private ActionItem[]? actionItems;
+    private IEnumerable<IGrouping<string, ActionItem>>? groupedActionItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        actionItems = await Http.GetFromJsonAsync<ActionItem[]>("/api/ActionList");
+        groupedActionItems = actionItems.OrderBy(t => t.Time).GroupBy(t => t.Time);
+    }
+
+    private string FormatDetails(ActionItem actionItem)
+    {
+        string detail = string.Empty;
+        if (actionItem.Application is not null)
+        {
+            return actionItem.Application;
+        }
+
+        detail = $"{actionItem.Quantity}{actionItem.Water}{actionItem.Unit}";
+
+        if (actionItem.Rate is not null)
+        {
+            return $"{detail} @ {actionItem.Rate}ml/hr";
+        }
+
+        return detail;
+    }
+}

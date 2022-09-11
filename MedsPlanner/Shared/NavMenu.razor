@@ -1,0 +1,122 @@
+﻿@inject AppState AppState
+
+@*<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Meds Planner</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>*@
+
+@*<div class="fixed-Top">Header buttons</div>*@
+<div class="bottomOptions">
+    <div class="top-row shadow-lg fixed-bottom navbar bg-white">
+        <div class="container-fluid px-4 d-flex align-items-baseline">
+            @*<i class="bi bi-calendar4-range text-primary" style="font-size: 2.5rem;"></i>*@
+            <div class="nav-item2">
+                <NavLink class="nav-link text-center p-0" style="line-height: 1.5rem;" href="actionitems">
+                    <i class="bi bi-calendar4-range" style="font-size: 1.5rem;"></i>
+                    <div style="font-size: smaller;">Planner</div>
+                </NavLink>
+            </div>
+            @*<i class="bi bi-capsule text-secondary" style="font-size: 2.5rem;"></i>*@
+            <div class="nav-item2">
+                <NavLink class="nav-link text-center p-0" style="line-height: 1.5rem;" href="meds">
+                    <i class="bi bi-capsule" style="font-size: 1.5rem;"></i>
+                    <div style="font-size: smaller;">Meds</div>
+                </NavLink>
+            </div>
+            @*<i class="bi bi-clipboard2-pulse text-secondary" style="font-size: 2.5rem;"></i>*@
+            <div class="nav-item2">
+                <NavLink class="nav-link text-center p-0" style="line-height: 1.5rem;" href="link3">
+                    <i class="bi bi-clipboard2-pulse" style="font-size: 1.5rem;"></i>
+                    <div style="font-size: smaller;">Levels</div>
+                </NavLink>
+            </div>
+            @*<i class="bi bi-exclamation-diamond text-secondary" style="font-size: 2.5rem;"></i>*@
+            <div class="nav-item2">
+                <NavLink class="nav-link text-center p-0" style="line-height: 1.5rem;" href="link4">
+                    <i class="bi bi-exclamation-diamond" style="font-size: 1.5rem;"></i>
+                    <div style="font-size: smaller;">Allergies</div>
+                </NavLink>
+            </div>
+            @*<i class="bi bi-gear text-secondary" style="font-size: 2.5rem;"></i>*@
+            @*<div class="nav-item2">
+            <NavLink class="nav-link text-center p-0" style="line-height: 1.5rem;" href="link5">
+            <i class="bi bi-gear" style="font-size: 1.5rem;"></i>
+            <div style="font-size: smaller;">Settings</div>
+            </NavLink>
+            </div>*@
+            <div class="nav-item2">
+            <div class="form-floating form-switch p-0 text-center" style="line-height: 1.5rem;">
+                <input class="form-check-input ms-0" type="checkbox" id="flexSwitchCheckChecked" aria-labelledby="DetailsLabel" checked="@(CheckedStatus())" @onchange="ChangePropertyValue"/>
+                @*<label class="form-check-label" for="flexSwitchCheckChecked">Detail</label>*@
+                <div id="DetailsLabel" style="font-size: smaller;">Details</div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchactionitems">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch Action Items
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="timeline">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Time Line
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="actionitems">
+                <span class="oi oi-calendar" aria-hidden="true"></span> Planner
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool displayDetail;
+
+    protected override void OnInitialized()
+    {
+        displayDetail = AppState.DisplayDetails;
+        //AppState.OnChange += StateHasChanged;
+    }
+
+    private bool CheckedStatus() => displayDetail ? true : false;
+
+    private void ChangePropertyValue()
+    {
+        AppState.DisplayDetails = !AppState.DisplayDetails;
+    }
+
+    public void Dispose()
+    {
+        //AppState.OnChange -= StateHasChanged;
+    }
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

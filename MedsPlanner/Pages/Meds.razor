@@ -1,0 +1,40 @@
+﻿@page "/meds"
+
+@inject HttpClient Http
+@inject AppState AppState
+
+@if (actionItems == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    @foreach (var medGroup in groupedMeds)
+    {
+        <dl>
+            <div>@($"{medGroup.Key}")</div>
+            @foreach (var med in medGroup)
+            {
+                <dt>@med.Time</dt>
+                <dt>@med.Quantity @med.Unit</dt>
+                <dd>@med.Application</dd>
+                <dd>@med.Strength</dd>
+            }
+        </dl>
+    }
+}
+
+
+@code {
+    private ActionItem[]? actionItems;
+    private IEnumerable<IGrouping<string, ActionItem>>? groupedMeds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string medstring = "Medication";
+        actionItems = await Http.GetFromJsonAsync<ActionItem[]>("/api/ActionList");
+        groupedMeds = actionItems.Where(i => i.ActionType == "Medication" || i.ActionType == "Vitamin")
+                                    .OrderBy(t => t.Time)
+                                    .GroupBy(t => t.Name);
+    }
+}

@@ -1,0 +1,112 @@
+﻿@page "/actionitems"
+
+@inject HttpClient Http
+@inject AppState AppState
+
+@if (actionItems == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    @*<div class="pill-container fixed-top shadow-sm pt-2 pb-2 bg-white">
+        <div class="d-flex justify-content-evenly" style="font-size: 1.2rem;">
+            <div class="badge rounded-pill bg-info">Meds</div>
+            <div class="badge rounded-pill bg-info">Feeds</div>
+            <div class="badge rounded-pill bg-info">Fluids</div>
+            <div class="badge rounded-pill bg-secondary">Care</div>
+            <div class="badge rounded-pill bg-light text-secondary">Detail</div>
+        </div>
+    </div>*@
+    @*<div class="pill-container fixed-top shadow-sm py-2 px-4 bg-white text-center">
+        <div>@AppState.DisplayDetails</div>
+        <div class="badge rounded-pill @ButtonCssClass" @onclick="ToggleDetail">Detail</div>
+    </div>*@
+
+    @foreach (var group in groupedActionItems)
+    {
+        <div class="timeline-content">
+            <div class="timeline-time">@($"{group.Key}")</div>
+            <dl>
+                @foreach (var actionItem in group)
+                {
+                    <dt>@actionItem.Name </dt>
+                    <dd>@FormatDetails(actionItem)</dd>
+                    <div class="text-muted px-2 @DetailCssClass">
+                        <dd>@actionItem.Type</dd>
+                        <dd>@actionItem.Strength</dd>
+                    </div>
+                }
+            </dl>
+        </div>
+    }
+}
+
+
+@code {
+    private ActionItem[]? actionItems;
+    private IEnumerable<IGrouping<string, ActionItem>>? groupedActionItems;
+
+    private bool displayDetail;
+
+    private string? DetailCssClass => displayDetail ? "d-block" : "d-none";
+    //private string? ButtonCssClass => displayDetail ? "bg-info" : "bg-secondary";
+
+    protected override async Task OnInitializedAsync()
+    {
+        actionItems = await Http.GetFromJsonAsync<ActionItem[]>("/api/ActionList");
+        groupedActionItems = actionItems.OrderBy(t => t.Time).GroupBy(t => t.Time);
+        //await Task.Delay(500);
+
+        displayDetail = AppState.DisplayDetails;
+
+        // NOT SUR EIF REQUIRED
+        AppState.OnChange += UpdateState;
+        //AppState.OnChange += StateHasChanged;
+    }
+
+    //private void UpdateState()
+    //{
+    //    // Need to use InvokeAsync, atleast
+    //    // on Blazor Server-Side
+    //    InvokeAsync(() =>
+    //    {
+    //        StateHasChanged();
+    //    });
+    //}
+
+    private void UpdateState()
+    {
+        displayDetail = AppState.DisplayDetails;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+    }
+
+    //private void ToggleDetail()
+    //{
+    //    displayDetail = !displayDetail;
+    //}
+
+    private string FormatDetails(ActionItem actionItem)
+    {
+        string detail = string.Empty;
+        //if (actionItem.Application is not null)
+        if (string.IsNullOrEmpty(actionItem.Application))
+        {
+            detail = $"{actionItem.Quantity}{actionItem.Water}{actionItem.Unit}";
+
+            if (actionItem.Rate is not null)
+            {
+                return $"{detail} @ {actionItem.Rate}ml/hr";
+            }
+
+            return detail;
+        }
+
+        return actionItem.Application;
+    }
+}
