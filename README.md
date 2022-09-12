@@ -1,5 +1,9 @@
 # MedsPlanner (Public)
 
+``` 
+*** PROJECT IN DEVELOPMENT ***
+```
+
 Blazor PWA App for managing and monitoring medications. This project is currently in development and the CSS has only been completed for display on a Mobile phone. The idea is that this can behave like a traditional Mobile App because of the PWA integration. On your phone you will be able to open the following URL in a browser and then will have the option to install on Android devices, or add to the home screen on IOS.
 
 **Demo:** https://medsplanner.co.uk/
